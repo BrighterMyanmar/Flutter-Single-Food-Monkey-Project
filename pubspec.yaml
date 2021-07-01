@@ -1,0 +1,38 @@
+name: app
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  http: ^0.13.3
+  flutter_card_swipper: ^0.3.0
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: English
+      fonts:
+        - asset: assets/fonts/Lora-Bold.ttf
+        - asset: assets/fonts/Lora-Italic.ttf
+        - asset: assets/fonts/Lora-Regular.ttf
+          style: italic
+    - family: Burmese
+      fonts:
+        - asset: assets/fonts/Padauk-Bold.ttf
+        - asset: assets/fonts/Padauk-Regular.ttf
+          weight: 700
