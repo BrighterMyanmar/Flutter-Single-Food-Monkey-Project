@@ -36,7 +36,7 @@ class _PreviewState extends State<Preview> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                   child: Text(product?.name ?? "",
-                      style: Constants.getTitleTextStyle()),
+                      style: Constants.getTitleTextStyle(35.0)),
                 ),
                 Container(
                   height: 150,

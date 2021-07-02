@@ -1,4 +1,5 @@
 import 'package:app/models/Product.dart';
+import 'package:app/pages/Login.dart';
 import 'package:app/util/Constants.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +42,7 @@ class _CartState extends State<Cart> {
                         Text("Sub Total  ",
                             style: TextStyle(
                                 color: Constants.primary, fontSize: 30)),
-                        Text("35000 Ks ",
+                        Text("${Constants.getCartTotal()} Ks ",
                             style: TextStyle(
                                 color: Constants.normal, fontSize: 30)),
                       ],
@@ -54,7 +55,16 @@ class _CartState extends State<Cart> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(40))),
                         color: Constants.normal,
-                        onPressed: () {},
+                        onPressed: () {
+                          if (Constants.user == null) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()));
+                          } else {
+                            print("Order Upload");
+                          }
+                        },
                         child: Text("Order Now",
                             style: TextStyle(
                                 color: Constants.primary, fontSize: 30)))
@@ -82,7 +92,8 @@ class _CartState extends State<Cart> {
               ]),
               child: Row(
                 children: [
-                  Image.network(product.images?[0], width: 120, height: 120),
+                  Image.network(Constants.changeImageLink(product.images?[0]),
+                      width: 120, height: 120),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, top: 5),
                     child: Column(children: [

@@ -4,6 +4,7 @@ import 'package:app/models/Category.dart';
 import 'package:app/models/Delivery.dart';
 import 'package:app/models/Product.dart';
 import 'package:app/models/Tag.dart';
+import 'package:app/models/User.dart';
 import 'package:app/util/Constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,14 +16,27 @@ class Api {
     return Constants.AppVersion == double.parse(responseData["result"]);
   }
 
-  static Future<bool> registerUser({name, phone, email, password}) async {
+  static Future<bool> registerUser({name, phone, password}) async {
     Uri url = Uri.parse("${Constants.BASE_URL}/user/register");
-    var json =
-        '{"name":"$name", "phone": "$phone", "email": "$email", "password": "$password"}';
-    print(json);
+    var json = jsonEncode({
+      "name": name,
+      "phone": phone,
+      "email": "email@email.com",
+      "password": "@123!Abc"
+    });
     var response = await http.post(url, body: json, headers: Constants.headers);
     var responseData = jsonDecode(response.body);
     print(responseData);
+    return responseData["con"];
+  }
+
+  static Future<bool> loginUser({phone, password}) async {
+    Uri url = Uri.parse("${Constants.BASE_URL}/user");
+    var json = jsonEncode({"phone": phone, "password": password});
+    var response = await http.post(url, body: json, headers: Constants.headers);
+    var responseData = jsonDecode(response.body);
+    var userData = responseData["result"];
+    Constants.user = User.fromJson(userData);
     return responseData["con"];
   }
 
@@ -84,5 +98,3 @@ class Api {
     return products;
   }
 }
-
-

@@ -48,7 +48,7 @@ class _DetailState extends State<Detail> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(product?.name ?? "",
-                      style: Constants.getTitleTextStyle()),
+                      style: Constants.getTitleTextStyle(35.0)),
                   Constants.getShoppingCardWidget(context, Colors.pinkAccent),
                 ],
               ),

@@ -18,8 +18,6 @@ void main() {
       "/preview": (context) => Preview(),
       "/detail": (context) => Detail(),
       "/cart": (context) => Cart(),
-      "/register": (context) => Register(),
-      "/login": (context) => Login()
     },
     theme: ThemeData(fontFamily: "English"),
   ));

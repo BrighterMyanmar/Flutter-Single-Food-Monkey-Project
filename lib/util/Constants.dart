@@ -1,6 +1,7 @@
 import 'package:app/models/Category.dart';
 import 'package:app/models/Product.dart';
 import 'package:app/models/Tag.dart';
+import 'package:app/models/User.dart';
 import 'package:flutter/material.dart';
 
 class Constants {
@@ -18,9 +19,11 @@ class Constants {
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, esse vero sequi veniam voluptate at iure aut dolor deleniti molestiae temporibus sint doloribus, assumenda dolore quas, nostrum ea aperiam enim!
   """;
 
-  static const BASE_URL = "http://192.168.8.104:3000";
+  static const BASE_URL = "http://192.168.8.103:3000";
   // static const BASE_URL = "http://localhost:3000";
   static const API_URL = "$BASE_URL/api";
+
+  static User? user = null;
 
   static Map<String, String> headers = {
     "Content-Type": "application/json",
@@ -30,7 +33,7 @@ class Constants {
   static List<Tag> tags = [];
 
   static String changeImageLink(image) {
-    var img = "http://192.168.8.104:3000" + image.split("3000")[1];
+    var img = "http://192.168.8.103:3000" + image.split("3000")[1];
     print(img);
     return img;
   }
@@ -76,9 +79,9 @@ class Constants {
     });
   }
 
-  static TextStyle getTitleTextStyle() {
+  static TextStyle getTitleTextStyle(double fsize) {
     return TextStyle(
-        fontSize: 35, fontWeight: FontWeight.bold, color: Constants.normal);
+        fontSize: fsize, fontWeight: FontWeight.bold, color: Constants.normal);
   }
 
   static Center getShoppingCardWidget(context, Color color) {
@@ -116,5 +119,13 @@ class Constants {
         ),
       ),
     );
+  }
+
+  static int getCartTotal() {
+    int total = 0;
+    cartProducts.forEach((prod) {
+      total += prod.count * int.parse(prod.price.toString());
+    });
+    return total;
   }
 }
