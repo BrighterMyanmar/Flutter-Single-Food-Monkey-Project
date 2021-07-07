@@ -1,4 +1,5 @@
 import 'package:app/models/Product.dart';
+import 'package:app/pages/History.dart';
 import 'package:app/pages/Login.dart';
 import 'package:app/util/Constants.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,10 @@ class _CartState extends State<Cart> {
                                 MaterialPageRoute(
                                     builder: (context) => Login()));
                           } else {
-                            print("Order Upload");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => History()));
                           }
                         },
                         child: Text("Order Now",

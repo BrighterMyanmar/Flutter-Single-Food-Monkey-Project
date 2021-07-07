@@ -18,8 +18,33 @@ class Constants {
   static const String sampleText = """ 
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, esse vero sequi veniam voluptate at iure aut dolor deleniti molestiae temporibus sint doloribus, assumenda dolore quas, nostrum ea aperiam enim!
   """;
+  static const String sampleImage =
+      "http://192.168.8.104:3000/uploads/8_1616675537280.png";
+  static const String sampleImage2 =
+      "http://192.168.8.104:3000/uploads/9_1616675537285.png";
 
-  static const BASE_URL = "http://192.168.8.103:3000";
+  static List<List<String>> orders = [
+    [
+      "Order One",
+      "Order One",
+      "Order One",
+    ],
+    [
+      "Order One",
+      "Order One",
+      "Order One",
+      "Order One",
+    ],
+    [
+      "Order One",
+      "Order One",
+      "Order One",
+      "Order One",
+      "Order One",
+    ],
+  ];
+
+  static const BASE_URL = "http://192.168.8.104:3000";
   // static const BASE_URL = "http://localhost:3000";
   static const API_URL = "$BASE_URL/api";
 
@@ -33,7 +58,7 @@ class Constants {
   static List<Tag> tags = [];
 
   static String changeImageLink(image) {
-    var img = "http://192.168.8.103:3000" + image.split("3000")[1];
+    var img = "http://192.168.8.104:3000" + image.split("3000")[1];
     print(img);
     return img;
   }
