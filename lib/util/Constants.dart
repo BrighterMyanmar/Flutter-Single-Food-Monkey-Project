@@ -18,10 +18,10 @@ class Constants {
   static const String sampleText = """ 
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, esse vero sequi veniam voluptate at iure aut dolor deleniti molestiae temporibus sint doloribus, assumenda dolore quas, nostrum ea aperiam enim!
   """;
-  static const String sampleImage =
-      "http://192.168.8.104:3000/uploads/8_1616675537280.png";
-  static const String sampleImage2 =
-      "http://192.168.8.104:3000/uploads/9_1616675537285.png";
+
+  static const BASE_URL = "http://192.168.8.100:3000";
+  static const String sampleImage = "$BASE_URL/uploads/8_1616675537280.png";
+  static const String sampleImage2 = "$BASE_URL/uploads/9_1616675537285.png";
 
   static List<List<String>> orders = [
     [
@@ -44,21 +44,23 @@ class Constants {
     ],
   ];
 
-  static const BASE_URL = "http://192.168.8.104:3000";
-  // static const BASE_URL = "http://localhost:3000";
   static const API_URL = "$BASE_URL/api";
 
   static User? user = null;
 
   static Map<String, String> headers = {
-    "Content-Type": "application/json",
+    "content-type": "application/json",
+  };
+  static Map<String, String> tokenHeader = {
+    "content-type": "application/json",
+    "authorization": "Bearer ${user?.token}"
   };
 
   static List<Category> cats = [];
   static List<Tag> tags = [];
 
   static String changeImageLink(image) {
-    var img = "http://192.168.8.104:3000" + image.split("3000")[1];
+    var img = "$BASE_URL" + image.split("3000")[1];
     print(img);
     return img;
   }
@@ -152,5 +154,16 @@ class Constants {
       total += prod.count * int.parse(prod.price.toString());
     });
     return total;
+  }
+
+  static generateOrder() {
+    List<Map> cartList = [];
+    cartProducts.forEach((prod) {
+      var map = new Map();
+      map["productId"] = prod.id;
+      map["count"] = prod.count.toString();
+      cartList.add(map);
+    });
+    return cartList;
   }
 }

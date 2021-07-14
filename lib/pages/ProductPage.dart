@@ -43,6 +43,11 @@ class _ProductPageState extends State<ProductPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(loadName ?? "Products"),
+          actions: [
+            InkWell(
+                onTap: () => Navigator.pushNamed(context, "/history"),
+                child: Icon(Icons.history, size: 45))
+          ],
         ),
         body: Column(children: [
           Text("Title Bar"),

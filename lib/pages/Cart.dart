@@ -1,6 +1,7 @@
 import 'package:app/models/Product.dart';
 import 'package:app/pages/History.dart';
 import 'package:app/pages/Login.dart';
+import 'package:app/util/Api.dart';
 import 'package:app/util/Constants.dart';
 import 'package:flutter/material.dart';
 
@@ -56,17 +57,26 @@ class _CartState extends State<Cart> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(40))),
                         color: Constants.normal,
-                        onPressed: () {
+                        onPressed: () async {
                           if (Constants.user == null) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Login()));
                           } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => History()));
+                            bool bol = await Api.updateOrder(
+                                total: Constants.getCartTotal(),
+                                items: Constants.generateOrder());
+
+                            if (bol) {
+                              Constants.cartProducts = [];
+                              Navigator.pushNamed(context, "/home");
+                            }
+
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => History()));
                           }
                         },
                         child: Text("Order Now",

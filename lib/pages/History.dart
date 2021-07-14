@@ -1,4 +1,6 @@
+import 'package:app/models/HistoryModel.dart';
 import 'package:app/pages/Chat.dart';
+import 'package:app/util/Api.dart';
 import 'package:app/util/Constants.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,21 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  List<HistoryModel> hm = [];
+  loadHistoryProduct() async {
+    List<HistoryModel> hh = await Api.getMyOrders();
+    setState(() {
+      hm = hh;
+      print(hm.length);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadHistoryProduct();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +44,7 @@ class _HistoryState extends State<History> {
           ],
         ),
         body: ListView.builder(
-            itemCount: Constants.orders.length,
+            itemCount: hm.length,
             itemBuilder: (context, pindex) {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 5),
@@ -36,7 +53,7 @@ class _HistoryState extends State<History> {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("02-02-2022",
+                        Text(hm[pindex].created ?? "",
                             style: TextStyle(
                                 color: Constants.primary,
                                 fontWeight: FontWeight.bold,
@@ -47,7 +64,7 @@ class _HistoryState extends State<History> {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          child: Text("17500 Ks",
+                          child: Text(hm[pindex].total.toString(),
                               style: TextStyle(
                                   color: Constants.primary,
                                   fontWeight: FontWeight.bold,
@@ -57,15 +74,15 @@ class _HistoryState extends State<History> {
                     ),
                     children: [
                       ...List.generate(
-                          Constants.orders[pindex].length,
-                          (index) => _buildHistoryCard(
-                              Constants.orders[pindex][index]))
+                          hm[pindex].items?.length ?? 0,
+                          (index) =>
+                              _buildHistoryCard(hm[pindex].items?[index]))
                     ]),
               );
             }));
   }
 
-  Container _buildHistoryCard(String name) {
+  Container _buildHistoryCard(var item) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -74,18 +91,16 @@ class _HistoryState extends State<History> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Image.network(
-                    Constants.sampleImage,
-                    width: 80,
-                    height: 80),
+                Image.network(Constants.changeImageLink(item.images[0]),
+                    width: 80, height: 80),
                 Column(
                   children: [
-                    Text(name,
+                    Text(item.name,
                         style: TextStyle(
                             color: Constants.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 18)),
-                    Text("3 * 3500",
+                    Text("${item.count} * ${item.price}",
                         style: TextStyle(
                             color: Constants.primary,
                             fontWeight: FontWeight.bold,
@@ -97,7 +112,7 @@ class _HistoryState extends State<History> {
                   color: Constants.normal,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Text("17500",
+                  child: Text("${item.count * item.price}",
                       style: TextStyle(
                           color: Constants.primary,
                           fontWeight: FontWeight.bold,

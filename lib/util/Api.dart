@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/models/Category.dart';
 import 'package:app/models/Delivery.dart';
+import 'package:app/models/HistoryModel.dart';
 import 'package:app/models/Product.dart';
 import 'package:app/models/Tag.dart';
 import 'package:app/models/User.dart';
@@ -21,8 +22,8 @@ class Api {
     var json = jsonEncode({
       "name": name,
       "phone": phone,
-      "email": "email@email.com",
-      "password": "@123!Abc"
+      "email": "$name@email.com",
+      "password": password
     });
     var response = await http.post(url, body: json, headers: Constants.headers);
     var responseData = jsonDecode(response.body);
@@ -96,5 +97,29 @@ class Api {
       products = pList.map((product) => Product.fromJson(product)).toList();
     }
     return products;
+  }
+
+  static Future<bool> updateOrder({total, items}) async {
+    var json = jsonEncode({'total': total, 'items': items});
+    Uri uri = Uri.parse("${Constants.BASE_URL}/api/order");
+    var response =
+        await http.post(uri, body: json, headers: Constants.tokenHeader);
+    var responseData = jsonDecode(response.body);
+    print(responseData);
+    return responseData["con"];
+    // return true;
+  }
+
+  static Future<List<HistoryModel>> getMyOrders() async {
+    var url = "${Constants.API_URL}/userorder/${Constants.user?.id}";
+    print(url);
+    var response = await http.get(Uri.parse(url));
+    var responseData = jsonDecode(response.body);
+    List<HistoryModel> hm = [];
+    if (responseData["con"]) {
+      var data = responseData["result"] as List;
+      hm = data.map((e) => HistoryModel.fromJson(e)).toList();
+    }
+    return hm;
   }
 }
