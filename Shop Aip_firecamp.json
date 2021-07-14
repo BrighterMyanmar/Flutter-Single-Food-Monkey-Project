@@ -1,0 +1,308 @@
+{
+    "meta": {
+        "__export_time": 1626255533123,
+        "__export_app": "firecamp_v2.0.10 ",
+        "__export_version": 1
+    },
+    "project": {
+        "name": "Shop Aip",
+        "description": ""
+    },
+    "modules": [],
+    "requests": [
+        {
+            "meta": {
+                "name": "Login",
+                "description": "",
+                "active_auth": "no_auth",
+                "type": "api",
+                "version": "1.0"
+            },
+            "url": {
+                "slashes": true,
+                "protocol": "http:",
+                "hash": "",
+                "pathname": "/user",
+                "auth": "",
+                "host": "127.0.0.1:3000",
+                "port": "3000",
+                "hostname": "127.0.0.1",
+                "password": "",
+                "username": "",
+                "origin": "http://127.0.0.1:3000",
+                "href": "http://127.0.0.1:3000/user",
+                "query_params": []
+            },
+            "method": "POST",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disable": false
+                }
+            ],
+            "config": {
+                "ORIGIN": "",
+                "USERAGENT": "",
+                "TIMEOUT_MS": 0,
+                "REJECT_UNAUTHORIZED": false,
+                "FOLLOWLOCATION": true,
+                "MAXREDIRS": -1,
+                "HTTP_VERSION": "V2Tls"
+            },
+            "scripts": {
+                "pre": "",
+                "post": "",
+                "test": ""
+            },
+            "bodies": [
+                {
+                    "name": "Default",
+                    "meta": {
+                        "active_body_type": "application/json",
+                        "is_default": true
+                    },
+                    "body": {
+                        "application/json": {
+                            "value": "{\r\n    \"phone\":\"09300300300\",\r\n    \"password\":\"@123!Abc\"\r\n}",
+                            "headers": []
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "meta": {
+                "name": "Product Skip",
+                "description": "",
+                "active_auth": "no_auth",
+                "type": "api",
+                "version": "1.0"
+            },
+            "url": {
+                "slashes": true,
+                "protocol": "http:",
+                "hash": "",
+                "pathname": "/api/products/0",
+                "auth": "",
+                "host": "127.0.0.1:3000",
+                "port": "3000",
+                "hostname": "127.0.0.1",
+                "password": "",
+                "username": "",
+                "origin": "http://127.0.0.1:3000",
+                "href": "http://127.0.0.1:3000/api/products/0",
+                "query_params": []
+            },
+            "method": "GET",
+            "headers": [],
+            "config": {
+                "ORIGIN": "",
+                "USERAGENT": "",
+                "TIMEOUT_MS": 0,
+                "REJECT_UNAUTHORIZED": false,
+                "FOLLOWLOCATION": true,
+                "MAXREDIRS": -1,
+                "HTTP_VERSION": "V2Tls"
+            },
+            "scripts": {
+                "pre": "",
+                "post": "",
+                "test": ""
+            },
+            "bodies": [
+                {
+                    "name": "Default",
+                    "meta": {
+                        "active_body_type": "noBody",
+                        "is_default": true
+                    },
+                    "body": {}
+                }
+            ]
+        },
+        {
+            "meta": {
+                "name": "Order Upload",
+                "description": "",
+                "active_auth": "bearer",
+                "type": "api",
+                "version": "1.0"
+            },
+            "url": {
+                "slashes": true,
+                "protocol": "http:",
+                "hash": "",
+                "pathname": "/api/order",
+                "auth": "",
+                "host": "127.0.0.1:3000",
+                "port": "3000",
+                "hostname": "127.0.0.1",
+                "password": "",
+                "username": "",
+                "origin": "http://127.0.0.1:3000",
+                "href": "http://127.0.0.1:3000/api/order",
+                "query_params": []
+            },
+            "method": "POST",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disable": false
+                }
+            ],
+            "config": {
+                "ORIGIN": "",
+                "USERAGENT": "",
+                "TIMEOUT_MS": 0,
+                "REJECT_UNAUTHORIZED": false,
+                "FOLLOWLOCATION": true,
+                "MAXREDIRS": -1,
+                "HTTP_VERSION": "V2Tls"
+            },
+            "scripts": {
+                "pre": "",
+                "post": "",
+                "test": ""
+            },
+            "auth": {
+                "bearer": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNWMxOTE2M2JhYzczMTBmYjE2YWFiYiIsImlhdCI6MTYyNjI1MjAyOX0.ZxJeOp1W2HOdHYiG0tKRQZrHAlzf6DL5VEZK4OI1wi0",
+                    "prefix": ""
+                }
+            },
+            "bodies": [
+                {
+                    "name": "Default",
+                    "meta": {
+                        "active_body_type": "application/json",
+                        "is_default": true
+                    },
+                    "body": {
+                        "application/json": {
+                            "value": "{\r\n    \"total\":10000,\r\n    \"items\":[\r\n        {\"count\":2,\"productId\":\"60d43fcd55bb7d3c9043ef2d\"}\r\n    ]\r\n}",
+                            "headers": []
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "meta": {
+                "name": "Get Order By Id",
+                "description": "",
+                "active_auth": "no_auth",
+                "type": "api",
+                "version": "1.0"
+            },
+            "url": {
+                "slashes": true,
+                "protocol": "http:",
+                "hash": "",
+                "pathname": "/api/order/60eea53f2f520a175486ab1b",
+                "auth": "",
+                "host": "127.0.0.1:3000",
+                "port": "3000",
+                "hostname": "127.0.0.1",
+                "password": "",
+                "username": "",
+                "origin": "http://127.0.0.1:3000",
+                "href": "http://127.0.0.1:3000/api/order/60eea53f2f520a175486ab1b",
+                "query_params": []
+            },
+            "method": "GET",
+            "headers": [],
+            "config": {
+                "ORIGIN": "",
+                "USERAGENT": "",
+                "TIMEOUT_MS": 0,
+                "REJECT_UNAUTHORIZED": false,
+                "FOLLOWLOCATION": true,
+                "MAXREDIRS": -1,
+                "HTTP_VERSION": "V2Tls"
+            },
+            "scripts": {
+                "pre": "",
+                "post": "",
+                "test": ""
+            },
+            "bodies": [
+                {
+                    "name": "Default",
+                    "meta": {
+                        "active_body_type": "noBody",
+                        "is_default": true
+                    },
+                    "body": {}
+                }
+            ]
+        },
+        {
+            "meta": {
+                "name": "Order History",
+                "description": "",
+                "active_auth": "no_auth",
+                "type": "api",
+                "version": "1.0"
+            },
+            "url": {
+                "slashes": true,
+                "protocol": "http:",
+                "hash": "",
+                "pathname": "/api/userorder/605c19163bac7310fb16aabb",
+                "auth": "",
+                "host": "127.0.0.1:3000",
+                "port": "3000",
+                "hostname": "127.0.0.1",
+                "password": "",
+                "username": "",
+                "origin": "http://127.0.0.1:3000",
+                "href": "http://127.0.0.1:3000/api/userorder/605c19163bac7310fb16aabb",
+                "query_params": []
+            },
+            "method": "GET",
+            "headers": [],
+            "config": {
+                "ORIGIN": "",
+                "USERAGENT": "",
+                "TIMEOUT_MS": 0,
+                "REJECT_UNAUTHORIZED": false,
+                "FOLLOWLOCATION": true,
+                "MAXREDIRS": -1,
+                "HTTP_VERSION": "V2Tls"
+            },
+            "scripts": {
+                "pre": "",
+                "post": "",
+                "test": ""
+            },
+            "bodies": [
+                {
+                    "name": "Default",
+                    "meta": {
+                        "active_body_type": "noBody",
+                        "is_default": true
+                    },
+                    "body": {}
+                }
+            ]
+        }
+    ],
+    "environments": [
+        {
+            "name": "Development",
+            "variables": {
+                "variable_name": "variable_value"
+            }
+        },
+        {
+            "name": "Production",
+            "variables": {
+                "variable_name": "variable_value"
+            }
+        }
+    ]
+}
