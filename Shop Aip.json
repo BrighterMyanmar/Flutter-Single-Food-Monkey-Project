@@ -1,6 +1,6 @@
 {
     "meta": {
-        "__export_time": 1626428339765,
+        "__export_time": 1626343037677,
         "__export_app": "firecamp_v2.0.10 ",
         "__export_version": 1
     },
@@ -373,28 +373,11 @@
                                 "type": "json",
                                 "envelope": ""
                             },
-                            "payload": "   {\r\n        \"from\": \"605c19163bac7310fb16aabc\",\r\n        \"to\": \"605c19163bac7310fb16aabb\",\r\n        \"msg\": \"From Tester to Owner\",\r\n        \"type\": \"text\"\r\n    }"
+                            "payload": "   {\r\n        \"from\": \"605c19163bac7310fb16aabc\",\r\n        \"to\": \"605c19163bac7310fb16aabb\"\r\n        \"msg\": \"From Tester to Owner\",\r\n        \"type\": \"string\"\r\n    }"
                         }
                     ],
                     "meta": {
                         "label": "Message",
-                        "interval": "",
-                        "ack": false
-                    }
-                },
-                {
-                    "name": "load",
-                    "body": [
-                        {
-                            "payload": "",
-                            "meta": {
-                                "type": "text",
-                                "envelope": ""
-                            }
-                        }
-                    ],
-                    "meta": {
-                        "label": "Load",
                         "interval": "",
                         "ack": false
                     }
@@ -471,113 +454,13 @@
                                 "type": "json",
                                 "envelope": ""
                             },
-                            "payload": "   {\r\n        \"from\": \"605c19163bac7310fb16aabb\",\r\n        \"to\": \"605c19163bac7310fb16aabc\",\r\n        \"msg\": \"From Owner to Tester\",\r\n        \"type\": \"text\"\r\n    }"
-                        },
-                        {
-                            "meta": {
-                                "type": "json",
-                                "envelope": ""
-                            },
-                            "payload": ""
-                        },
-                        {
-                            "meta": {
-                                "type": "text",
-                                "envelope": ""
-                            },
-                            "payload": ""
+                            "payload": "   {\r\n        \"from\": \"605c19163bac7310fb16aabb\",\r\n        \"to\": \"605c19163bac7310fb16aabc\",\r\n        \"msg\": \"From Owner to Tester\",\r\n        \"type\": \"string\"\r\n    }"
                         }
                     ],
                     "meta": {
                         "label": "Message",
                         "interval": "",
                         "ack": false
-                    }
-                },
-                {
-                    "name": "load",
-                    "body": [
-                        {
-                            "payload": "",
-                            "meta": {
-                                "type": "text",
-                                "envelope": ""
-                            }
-                        }
-                    ],
-                    "meta": {
-                        "label": "Load",
-                        "interval": "",
-                        "ack": false
-                    }
-                }
-            ]
-        },
-        {
-            "meta": {
-                "name": "Image Upload Mobile",
-                "description": "",
-                "active_auth": "no_auth",
-                "type": "api",
-                "version": "1.0"
-            },
-            "url": {
-                "slashes": true,
-                "protocol": "http:",
-                "hash": "",
-                "pathname": "/gallery",
-                "auth": "",
-                "host": "127.0.0.1:3000",
-                "port": "3000",
-                "hostname": "127.0.0.1",
-                "password": "",
-                "username": "",
-                "origin": "http://127.0.0.1:3000",
-                "href": "http://127.0.0.1:3000/gallery",
-                "query_params": []
-            },
-            "method": "POST",
-            "headers": [
-                {
-                    "key": "Content-Type",
-                    "value": "multipart/form-data",
-                    "type": "text",
-                    "disable": false
-                }
-            ],
-            "config": {
-                "ORIGIN": "",
-                "USERAGENT": "",
-                "TIMEOUT_MS": 0,
-                "REJECT_UNAUTHORIZED": false,
-                "FOLLOWLOCATION": true,
-                "MAXREDIRS": -1,
-                "HTTP_VERSION": "V2Tls"
-            },
-            "scripts": {
-                "pre": "",
-                "post": "",
-                "test": ""
-            },
-            "bodies": [
-                {
-                    "name": "Default",
-                    "meta": {
-                        "active_body_type": "multipart/form-data",
-                        "is_default": true
-                    },
-                    "body": {
-                        "multipart/form-data": {
-                            "value": [
-                                {
-                                    "key": "photo",
-                                    "value": "",
-                                    "disable": false,
-                                    "type": "file"
-                                }
-                            ],
-                            "headers": []
-                        }
                     }
                 }
             ]

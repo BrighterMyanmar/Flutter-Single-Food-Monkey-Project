@@ -3,6 +3,7 @@ import 'package:app/models/Product.dart';
 import 'package:app/models/Tag.dart';
 import 'package:app/models/User.dart';
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Constants {
   static const double AppVersion = 1.0;
@@ -18,8 +19,10 @@ class Constants {
   static const String sampleText = """ 
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, esse vero sequi veniam voluptate at iure aut dolor deleniti molestiae temporibus sint doloribus, assumenda dolore quas, nostrum ea aperiam enim!
   """;
-
+  static User? user;
   static const BASE_URL = "http://192.168.8.100:3000";
+  static String SOCKET_END_POINT = "$BASE_URL/chat?token=${user?.token}";
+  static const String GALLERY_URL = "$BASE_URL/gallery";
   static const String sampleImage = "$BASE_URL/uploads/8_1616675537280.png";
   static const String sampleImage2 = "$BASE_URL/uploads/9_1616675537285.png";
 
@@ -45,8 +48,7 @@ class Constants {
   ];
 
   static const API_URL = "$BASE_URL/api";
-
-  static User? user = null;
+  static const shopId = "605c19163bac7310fb16aabc";
 
   static Map<String, String> headers = {
     "content-type": "application/json",
@@ -58,9 +60,19 @@ class Constants {
 
   static List<Category> cats = [];
   static List<Tag> tags = [];
+  static IO.Socket? socket;
+
+  static getSocket() {
+    socket = IO.io(SOCKET_END_POINT, <String, dynamic>{
+      'transports': ['websocket']
+    });
+    socket?.onConnect((_) {
+      print('connect');
+    });
+  }
 
   static String changeImageLink(image) {
-    var img = "$BASE_URL" + image.split("3000")[1];
+    var img = "$BASE_URL/uploads" + image.split("uploads")[1];
     print(img);
     return img;
   }

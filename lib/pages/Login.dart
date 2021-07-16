@@ -12,8 +12,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  var phoneController = TextEditingController();
-  var passwordController = TextEditingController();
+  var phoneController = TextEditingController(text: "09300300300");
+  var passwordController = TextEditingController(text: "@123!Abc");
   @override
   Widget build(BuildContext context) {
     var msize = MediaQuery.of(context).size;
@@ -90,6 +90,7 @@ class _LoginState extends State<Login> {
                               bool bol = await Api.loginUser(
                                   phone: phone, password: password);
                               if (bol) {
+                                Constants.getSocket();
                                 Navigator.pop(context);
                               }
                             },

@@ -1,4 +1,5 @@
 import 'package:app/models/Category.dart';
+import 'package:app/pages/Chat.dart';
 import 'package:app/pages/ProductPage.dart';
 import 'package:app/util/Constants.dart';
 import 'package:flutter/material.dart';
@@ -15,47 +16,61 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _buildTitleText(context, "Tags"),
-        Container(
-          height: 150,
-          child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
+        appBar: AppBar(
+          actions: [
+            InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductPage(
-                              loadName: Constants.tags[index].name,
-                              type: "tag")));
+                  if (Constants.user == null) {
+                    Navigator.pushNamed(context, '/login');
+                  } else {
+                    Navigator.pushNamed(context, "/chat");
+                  }
                 },
-                child: new Image.network(
-                  Constants.tags[index].image ?? "",
-                  fit: BoxFit.contain,
-                ),
-              );
-            },
-            itemCount: Constants.tags.length,
-            pagination: new SwiperPagination(),
-            control: new SwiperControl(),
-          ),
+                child: Icon(Icons.chat)),
+            SizedBox(width: 20),
+          ],
         ),
-        _buildTitleText(context, "Categories"),
-        GridView.builder(
-            shrinkWrap: true,
-            itemCount: Constants.cats.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1,
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 0),
-            itemBuilder: (context, index) =>
-                _buildCategory(context, Constants.cats[index]))
-      ],
-    ));
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildTitleText(context, "Tags"),
+            Container(
+              height: 150,
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductPage(
+                                  loadName: Constants.tags[index].name,
+                                  type: "tag")));
+                    },
+                    child: new Image.network(
+                      Constants.tags[index].image ?? "",
+                      fit: BoxFit.contain,
+                    ),
+                  );
+                },
+                itemCount: Constants.tags.length,
+                pagination: new SwiperPagination(),
+                control: new SwiperControl(),
+              ),
+            ),
+            _buildTitleText(context, "Categories"),
+            GridView.builder(
+                shrinkWrap: true,
+                itemCount: Constants.cats.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 1,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 0),
+                itemBuilder: (context, index) =>
+                    _buildCategory(context, Constants.cats[index]))
+          ],
+        ));
   }
 
   Widget _buildCategory(BuildContext context, Category cat) {

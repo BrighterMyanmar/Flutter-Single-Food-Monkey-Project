@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:app/models/Message.dart';
+import 'package:app/models/MsgRes.dart';
 import 'package:app/util/Constants.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -9,64 +16,53 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  List<Map<String, String>> chats = [
-    {
-      "from": "Mg Mg",
-      "to": "Aung Aung",
-      "msg": "How are you?",
-      "type": "text",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Aung Aung",
-      "to": "Mg Mg",
-      "msg": Constants.sampleText,
-      "type": "text",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Mg Mg",
-      "to": "Aung Aung",
-      "msg": Constants.sampleImage,
-      "type": "image",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Aung Aung",
-      "to": "Mg Mg",
-      "msg": Constants.sampleImage2,
-      "type": "image",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Mg Mg",
-      "to": "Aung Aung",
-      "msg": Constants.sampleText,
-      "type": "text",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Aung Aung",
-      "to": "Mg Mg",
-      "msg": "Good",
-      "type": "text",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Mg Mg",
-      "to": "Aung Aung",
-      "msg": Constants.sampleImage,
-      "type": "image",
-      "created": "20-02-2022"
-    },
-    {
-      "from": "Aung Aung",
-      "to": "Mg Mg",
-      "msg": Constants.sampleImage2,
-      "type": "image",
-      "created": "20-02-2022"
-    }
-  ];
+  List<Message> chats = [];
+  final picker = ImagePicker();
+  File? _image;
+  final _msgInputController = TextEditingController();
+  ScrollController _scrollController =
+      new ScrollController(initialScrollOffset: 50.0);
+
+  invikeSocket() {
+    Constants.socket?.emit('load');
+    Constants.socket?.on("message", (data) {
+      print("New Message");
+      Message msg = Message.fromJson(data);
+      chats.add(msg);
+      setState(() {
+        _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent + 450,
+            duration: Duration(seconds: 1),
+            curve: Curves.fastOutSlowIn);
+      });
+    });
+    Constants.socket?.on("messages", (data) {
+      List lisy = data as List;
+      chats = lisy.map((e) => Message.fromJson(e)).toList();
+      setState(() {
+        _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent + 450,
+            duration: Duration(seconds: 1),
+            curve: Curves.fastOutSlowIn);
+      });
+    });
+  }
+
+  _emitMessage(msg, type) {
+    var sendMsg = new Map();
+    sendMsg["from"] = Constants.user?.id;
+    sendMsg["to"] = Constants.shopId;
+    sendMsg["msg"] = msg;
+    sendMsg["type"] = type;
+    Constants.socket?.emit("message", sendMsg);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    invikeSocket();
+  }
+
   @override
   Widget build(BuildContext context) {
     var msize = (MediaQuery.of(context).size.width / 3) * 2;
@@ -75,9 +71,10 @@ class _ChatState extends State<Chat> {
         body: Column(children: [
           Expanded(
               child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: chats.length,
                   itemBuilder: (context, index) =>
-                      chats[index]["from"] == "Mg Mg"
+                      chats[index].from?.name == Constants.user?.name
                           ? _leftUser(msize, chats[index])
                           : _rightUser(msize, chats[index]))),
           Container(
@@ -86,9 +83,14 @@ class _ChatState extends State<Chat> {
             decoration: BoxDecoration(color: Constants.normal),
             child: Row(
               children: [
-                Icon(Icons.file_copy),
+                InkWell(
+                    onTap: () async {
+                      await getImage();
+                    },
+                    child: Icon(Icons.file_copy)),
                 Expanded(
                   child: TextFormField(
+                    controller: _msgInputController,
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Constants.primary)),
@@ -96,26 +98,57 @@ class _ChatState extends State<Chat> {
                             borderSide: BorderSide(color: Constants.normal))),
                   ),
                 ),
-                Icon(Icons.send),
+                InkWell(
+                    onTap: () {
+                      var mesg = _msgInputController.text;
+                      _emitMessage(mesg, "text");
+                    },
+                    child: Icon(Icons.send)),
               ],
             ),
           )
         ]));
   }
 
-  Widget _leftUser(msize, chat) {
-    return chat["type"] == "text"
+  uploadImageNow() async {
+    var postUri = Uri.parse(Constants.GALLERY_URL);
+    http.MultipartRequest request = new http.MultipartRequest("POST", postUri);
+    http.MultipartFile multipartFile =
+        await http.MultipartFile.fromPath("photo", _image?.path ?? "");
+    request.files.add(multipartFile);
+    request.headers.addAll(Constants.tokenHeader);
+    await request.send().then((response) async {
+      response.stream.transform(utf8.decoder).listen((value) {
+        var resData = jsonDecode(value);
+        MsgRes msgRes = MsgRes.fromJson(resData['result']);
+        _emitMessage(msgRes.link, "image");
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = File(pickedFile?.path ?? "");
+      uploadImageNow();
+    });
+  }
+
+  Widget _leftUser(msize, Message chat) {
+    return chat.type == "text"
         ? _buildLeftChatBox(msize, chat)
-        : _buildLeftImage(msize, chat["msg"]);
+        : _buildLeftImage(msize, chat.msg);
   }
 
   Widget _rightUser(msize, chat) {
-    return chat["type"] == "text"
+    return chat.type == "text"
         ? _buildRightChatBox(msize, chat)
-        : _buildRightImage(msize, chat["msg"]);
+        : _buildRightImage(msize, chat.msg);
   }
 
-  Widget _buildLeftImage(msize, String image) {
+  Widget _buildLeftImage(msize, var image) {
     return Row(
       children: [
         Container(
@@ -124,13 +157,13 @@ class _ChatState extends State<Chat> {
           decoration: BoxDecoration(
               color: Constants.normal,
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Image.network(image),
+          child: Image.network(Constants.changeImageLink(image)),
         ),
       ],
     );
   }
 
-  Widget _buildRightImage(msize, String image) {
+  Widget _buildRightImage(msize, var image) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -146,7 +179,7 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  Widget _buildLeftChatBox(msize, Map<String, String> chat) {
+  Widget _buildLeftChatBox(msize, Message chat) {
     return Row(
       children: [
         Container(
@@ -163,14 +196,13 @@ class _ChatState extends State<Chat> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(chat["from"] ?? "",
+              Text(chat.from?.name ?? "",
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(chat["msg"] ?? "",
-                  style: TextStyle(color: Constants.normal)),
+              Text(chat.msg ?? "", style: TextStyle(color: Constants.normal)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(chat["created"] ?? "",
+                  Text(chat.created ?? "",
                       style: TextStyle(color: Constants.primary)),
                 ],
               )
@@ -181,7 +213,7 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  Widget _buildRightChatBox(msize, Map<String, String> chat) {
+  Widget _buildRightChatBox(msize, Message chat) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -199,14 +231,13 @@ class _ChatState extends State<Chat> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(chat["from"] ?? "",
+              Text(chat.from?.name ?? "",
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(chat["msg"] ?? "",
-                  style: TextStyle(color: Constants.normal)),
+              Text(chat.msg ?? "", style: TextStyle(color: Constants.normal)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(chat["created"] ?? "",
+                  Text(chat.created ?? "",
                       style: TextStyle(color: Constants.primary)),
                 ],
               )
